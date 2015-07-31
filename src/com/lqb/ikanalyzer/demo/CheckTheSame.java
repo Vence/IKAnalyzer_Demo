@@ -4,6 +4,9 @@ package com.lqb.ikanalyzer.demo;
 import com.lqb.ikanalyzer.service.*;
 import com.lqb.ikanalyzer.Utils.FunctionUtil;
 import com.lqb.ikanalyzer.Utils.IKAnalyzerUtil;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -37,19 +40,25 @@ public class CheckTheSame {
 	//可以将此main函数改生servlet直接运用到系统中
 	//接受参数为用户搜索内容,String str
 	//返回参数为用户搜索结果,String result
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
-		Scanner scan = new Scanner(System.in);
+		Scanner scan = new Scanner(System.in , "utf-8");
 		String str = null;
 		String result = null;
+		
 		System.out.println("请输入您想查询的内容：");
 		while(true) {
 			str = scan.next();
+			
+			byte[] b = str.getBytes("gbk");
+			
+			str = new String(b , "utf-8");
+			
 			//去掉“的”,因分词能力有限
 			str = str.replaceAll("[的]","" );
 			//分词
 			Vector<String> strs1 = IKAnalyzerUtil.participle(str) ;
-			System.out.println(strs1);
+			
 			int type = getFunctionType(strs1);
 			switch (type) {
 				case FunctionUtil.Information:
